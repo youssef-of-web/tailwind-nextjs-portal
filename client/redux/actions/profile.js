@@ -19,7 +19,7 @@ export const GetProfile = (setForm) => async (dispatch)=>{
      });
 }
 
-export const AddProfile = (form) => dispatch=>{
+export const AddProfile = (form, setMessage, setShow) => dispatch=>{
     axios
       .post("/api/profile", form)
       .then(res => {
@@ -27,6 +27,12 @@ export const AddProfile = (form) => dispatch=>{
                type: GET_PROFILE,
                payload: res.data
           })
+          setMessage("Profile updated with success")
+          setShow(true)
+
+          setTimeout(() => {
+               setShow(false) 
+          }, 3000);
       })
       .catch(err => {
          dispatch({

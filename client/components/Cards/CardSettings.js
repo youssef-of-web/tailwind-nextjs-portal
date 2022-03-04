@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { GetProfile, AddProfile } from '../../redux/actions/profile'
+import Classnames from 'classnames'
 // components
 
 export default function CardSettings() {
@@ -9,6 +10,8 @@ export default function CardSettings() {
   const dispatch = useDispatch()
   const errors = useSelector(state => state.errors)
   const profile = useSelector(state => state.profile.profile)
+  const [message, setMessage] = useState("")
+  const [show, setShow] = useState(false)
   const onChange = (e)=>{
    setForm({
      ...form,
@@ -18,15 +21,16 @@ export default function CardSettings() {
 
   const onSubmit = (e)=>{
   e.preventDefault()
-  dispatch(AddProfile(form))
+  dispatch(AddProfile(form, setMessage, setShow))
   }
   useEffect(async()=>{
     await dispatch(GetProfile(setForm))
   },[])
   return (
     <>
+     
       <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blueGray-100 border-0">
-
+        
             <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
         
           <form onSubmit={onSubmit}>
@@ -39,6 +43,11 @@ export default function CardSettings() {
               >
                 Update profile
               </button>
+            </div>
+          </div>
+          <div className={Classnames("rounded-t bg-green-500 mb-0 px-6 py-6 mt-3", {"hidden": !show})} style={{ backgroundColor: "green", opacity: "0.5"}}>
+            <div className="text-center flex justify-between">
+              <h6 className="text-white text-xl font-bold">{message}</h6>
             </div>
           </div>
             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
@@ -55,6 +64,7 @@ export default function CardSettings() {
                   </label>
                   <input
                     type="email"
+                    value={form && form.user && form.user.email ? form.user.email : ""}
                     className="border-0 px-3 py-3 disabled placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                    disabled
                   />
@@ -80,7 +90,7 @@ export default function CardSettings() {
                   <input
                     type="text"
                     name="address"
-                    value={form.address}
+                    value={form && form.address ? form.address : ""}
                     onChange={onChange}
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   />
@@ -100,7 +110,7 @@ export default function CardSettings() {
                   <input
                     type="text"
                     name="city"
-                    value={form.city}
+                    value={form && form.city ? form.city : ""}
                     onChange={onChange}
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   />
@@ -120,7 +130,7 @@ export default function CardSettings() {
                   <input
                     type="text"
                     name="country"
-                    value={form.country}
+                    value={form && form.country ? form.country : ""}
                     onChange={onChange}
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   />
@@ -140,7 +150,7 @@ export default function CardSettings() {
                   <input
                     type="text"
                     name="postalcode"
-                    value={form.postalcode}
+                    value={form && form.postalcode ? form.postalcode : ""}
                     onChange={onChange}
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   />
@@ -169,7 +179,7 @@ export default function CardSettings() {
                     type="text"
                     onChange={onChange}
                     name="about"
-                    value={form.about}
+                    value={form && form.about ? form.about : ""}
                     className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     rows="4"
                   ></textarea>
